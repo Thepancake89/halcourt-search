@@ -462,18 +462,17 @@ p:last-child {
 
 /* Drop ball that falls to "How We Work" section */
 .hero__drop-ball {
-  position: absolute;
-  bottom: 5%;
-  right: 5%;
+  position: fixed;
+  /* Position set dynamically via JS */
   width: 30px;
   height: 30px;
   background: radial-gradient(circle at 30% 30%, rgba(59,130,246,1), rgba(59,130,246,0.7));
   border-radius: 50%;
-  z-index: 100;
+  z-index: 1000;
   pointer-events: none;
   box-shadow: 0 0 30px rgba(59,130,246,0.8), 0 0 60px rgba(59,130,246,0.4);
-  transition: transform 0.15s ease-out, opacity 0.3s ease-out, width 0.15s ease-out, height 0.15s ease-out;
-  will-change: transform, opacity, width, height;
+  transition: left 0.05s linear, top 0.05s linear, transform 0.15s ease-out, opacity 0.3s ease-out, width 0.15s ease-out, height 0.15s ease-out;
+  will-change: left, top, transform, opacity, width, height;
 }
 
 /* Bounce animation */
@@ -489,6 +488,41 @@ p:last-child {
 
 .hero__drop-ball--bouncing {
   animation: bounceOnText 1.2s ease-out forwards;
+}
+
+/* Tiny orbs that appear when drop ball lands */
+.tiny-orbs-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.tiny-orb {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(59,130,246,0.9), rgba(59,130,246,0.6));
+  box-shadow: 0 0 10px rgba(59,130,246,0.8);
+  animation: orbSpread 1.2s ease-out forwards;
+}
+
+@keyframes orbSpread {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(
+      calc(cos(var(--angle)) * var(--distance)),
+      calc(sin(var(--angle)) * var(--distance))
+    ) scale(0.3);
+    opacity: 0;
+  }
 }
 
 .hero__drop-ball--hidden {
