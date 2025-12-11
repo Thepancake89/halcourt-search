@@ -11,7 +11,7 @@ Executive search website for Halcourt Search Ltd — specialist recruiters for s
 - **HTML5** — Semantic markup
 - **CSS3** — Custom properties, Flexbox, Grid
 - **Vanilla JavaScript** — No frameworks
-- **Netlify** — Hosting and form handling
+- **Vercel** — Hosting and deployment
 - **Supabase Storage** — Image hosting (optional)
 
 ## Local Development
@@ -31,12 +31,13 @@ npx serve
 
 ## Deployment
 
-This site auto-deploys to Netlify when changes are pushed to the `main` branch.
+This site auto-deploys to Vercel when changes are pushed to the `main` branch.
 
-1. Connect this repo to Netlify
-2. Set publish directory to `/`
-3. No build command needed
-4. Push to `main` → site deploys automatically
+1. Connect this repo to Vercel
+2. Framework Preset: Other
+3. Root Directory: `./`
+4. No build command needed
+5. Push to `main` → site deploys automatically
 
 ## File Structure
 
@@ -68,7 +69,7 @@ halcourt-search/
 │   ├── CONTENT.md
 │   └── IMAGES.md
 │
-├── netlify.toml        # Netlify configuration
+├── vercel.json         # Vercel configuration (optional)
 ├── .gitignore          # Git ignore rules
 └── README.md           # This file
 ```
@@ -99,7 +100,7 @@ Edit the HTML files directly. Look for `[PLACEHOLDER]` comments for content that
 3. Ensure images are optimised (compressed, correct dimensions)
 
 ### Forms
-Forms are handled by Netlify Forms. Submissions appear in the Netlify dashboard under Forms.
+Contact form requires a form submission service (Formspree, Web3Forms, or custom API endpoint). Update the `action` attribute in `contact.html` with your form endpoint URL.
 
 ## SEO Checklist
 

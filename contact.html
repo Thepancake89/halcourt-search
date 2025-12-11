@@ -78,12 +78,13 @@
           <div>
             <h2 class="mb-8">Send us a message</h2>
             
-            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data">
-              <input type="hidden" name="form-name" value="contact">
-              
+            <form name="contact" method="POST" action="#" id="contactForm" enctype="multipart/form-data">
+              <!-- TODO: Set up form submission service (Formspree, Web3Forms, or custom API) -->
+              <!-- Replace action="#" with your form endpoint -->
+
               <!-- Honeypot field for spam prevention -->
               <p class="hidden">
-                <label>Don't fill this out if you're human: <input name="bot-field"></label>
+                <label>Don't fill this out if you're human: <input name="bot-field" tabindex="-1" autocomplete="off"></label>
               </p>
               
               <div class="form__group">

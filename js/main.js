@@ -13,7 +13,7 @@
   const menuToggle = document.querySelector('.menu-toggle');
   const mobileNav = document.querySelector('.mobile-nav');
   const mobileNavLinks = document.querySelectorAll('.mobile-nav__link');
-  const forms = document.querySelectorAll('form[data-netlify="true"]');
+  const contactForm = document.getElementById('contactForm');
 
   /* -------------------------------------------------------------------------
      Mobile Navigation
@@ -146,28 +146,69 @@
   var howWeWorkLabel = howWeWorkSection ? howWeWorkSection.querySelector('.label') : null;
   var hasBounced = false;
 
+  function createTinyOrbs(x, y) {
+    var numOrbs = 6;
+    var orbContainer = document.createElement('div');
+    orbContainer.className = 'tiny-orbs-container';
+    document.body.appendChild(orbContainer);
+
+    for (var i = 0; i < numOrbs; i++) {
+      var orb = document.createElement('div');
+      orb.className = 'tiny-orb';
+
+      // Evenly distributed directions
+      var angle = (360 / numOrbs) * i;
+      var distance = 30 + Math.random() * 20;
+
+      orb.style.left = x + 'px';
+      orb.style.top = y + 'px';
+      orb.style.setProperty('--angle', angle + 'deg');
+      orb.style.setProperty('--distance', distance + 'px');
+
+      orbContainer.appendChild(orb);
+    }
+
+    // Remove after animation completes
+    setTimeout(function() {
+      orbContainer.remove();
+    }, 1500);
+  }
+
   function updateDropBall() {
     if (!dropBall || !heroSection) return;
-    
+
     var scrollY = window.scrollY;
     var heroHeight = heroSection.offsetHeight;
+    var heroRect = heroSection.getBoundingClientRect();
+    var heroOffsetTop = heroRect.top + scrollY;
     var windowWidth = window.innerWidth;
-    
+
     // Ball starts falling when user scrolls past 20% of hero
     var fallStart = heroHeight * 0.2;
     var fallEnd = heroHeight * 0.95;
-    
-    // Calculate target position (where "How We Work" label is)
-    var targetX = windowWidth * 0.15; // roughly where the label starts
-    var targetY = heroHeight + 100; // just below hero into the section
-    
-    // Starting position (lower-right of hero)
+
+    // Get actual "How We Work" label position
+    var targetX, targetY;
+    if (howWeWorkLabel) {
+      var labelRect = howWeWorkLabel.getBoundingClientRect();
+      targetX = labelRect.left;
+      targetY = labelRect.top + scrollY;
+    } else {
+      // Fallback if label not found
+      targetX = windowWidth * 0.15;
+      targetY = heroHeight + 100;
+    }
+
+    // Starting position (lower-right of hero) in viewport coordinates
     var startX = windowWidth * 0.9;
-    var startY = heroHeight * 0.85;
-    
+    var startY = heroOffsetTop + (heroHeight * 0.85);
+
     if (scrollY < fallStart) {
-      // Ball is stationary at convergence point area
-      dropBall.style.transform = 'translate(0, 0) scale(1)';
+      // Ball is stationary at convergence point area (lower-right of hero)
+      var initialViewportY = startY - scrollY;
+      dropBall.style.left = startX + 'px';
+      dropBall.style.top = initialViewportY + 'px';
+      dropBall.style.transform = 'translate(-50%, -50%) scale(1)';
       dropBall.style.opacity = '1';
       dropBall.style.width = '30px';
       dropBall.style.height = '30px';
@@ -177,18 +218,24 @@
     } else if (scrollY >= fallStart && scrollY < fallEnd) {
       // Ball is falling
       var fallProgress = (scrollY - fallStart) / (fallEnd - fallStart);
-      
+
       // Eased fall (accelerates like gravity)
       var easedProgress = fallProgress * fallProgress;
-      
-      // Calculate movement from start to target
-      var moveX = (startX - targetX) * easedProgress;
-      var moveY = easedProgress * (targetY - startY + 200);
-      
-      // Ball grows as it falls (30px to 50px)
+
+      // Calculate interpolated position from start to target
+      var currentX = startX + (targetX - startX) * easedProgress;
+      var currentY = startY + (targetY - startY) * easedProgress;
+
+      // Convert to viewport position (position: fixed uses viewport coordinates)
+      var viewportX = currentX;
+      var viewportY = currentY - scrollY;
+
+      // Ball grows as it falls (30px to 55px)
       var size = 30 + (easedProgress * 25);
-      
-      dropBall.style.transform = 'translate(' + (-moveX) + 'px, ' + moveY + 'px) scale(' + (1 + easedProgress * 0.5) + ')';
+
+      dropBall.style.left = viewportX + 'px';
+      dropBall.style.top = viewportY + 'px';
+      dropBall.style.transform = 'translate(-50%, -50%) scale(' + (1 + easedProgress * 0.5) + ')';
       dropBall.style.opacity = '1';
       dropBall.style.width = size + 'px';
       dropBall.style.height = size + 'px';
@@ -197,22 +244,25 @@
       dropBall.classList.remove('hero__drop-ball--bouncing');
       dropBall.classList.remove('hero__drop-ball--hidden');
     } else {
-      // Ball has landed on "How We Work" - trigger bounce and fade
-      var finalX = startX - targetX;
-      var finalY = targetY - startY + 200;
-      
-      dropBall.style.transform = 'translate(' + (-finalX) + 'px, ' + finalY + 'px) scale(1.5)';
+      // Ball has landed on "How We Work" - trigger bounce and break into tiny orbs
+      var viewportX = targetX;
+      var viewportY = targetY - scrollY;
+
+      dropBall.style.left = viewportX + 'px';
+      dropBall.style.top = viewportY + 'px';
+      dropBall.style.transform = 'translate(-50%, -50%) scale(1.5)';
       dropBall.style.width = '55px';
       dropBall.style.height = '55px';
-      
+
       if (!hasBounced) {
         hasBounced = true;
         dropBall.classList.add('hero__drop-ball--bouncing');
-        
-        // After bounce animation, hide the ball
+
+        // Create tiny orbs effect after a short delay
         setTimeout(function() {
+          createTinyOrbs(viewportX, viewportY);
           dropBall.classList.add('hero__drop-ball--hidden');
-        }, 1200);
+        }, 600);
       }
     }
   }
@@ -255,49 +305,59 @@
   /* -------------------------------------------------------------------------
      Form Handling
      ------------------------------------------------------------------------- */
-  
-  forms.forEach(function(form) {
-    form.addEventListener('submit', handleFormSubmit);
-  });
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', handleFormSubmit);
+  }
 
   function handleFormSubmit(e) {
     e.preventDefault();
-    
+
     const form = e.target;
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalBtnText = submitBtn.textContent;
-    
+
     // Basic validation
     if (!validateForm(form)) {
       return;
     }
-    
+
     // Disable button and show loading state
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
-    
+
     // Prepare form data
     const formData = new FormData(form);
-    
-    // Submit to Netlify
-    fetch('/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams(formData).toString()
-    })
-    .then(function(response) {
-      if (response.ok) {
-        showFormSuccess(form);
-      } else {
-        throw new Error('Form submission failed');
-      }
-    })
-    .catch(function(error) {
-      console.error('Error:', error);
-      showFormError(form, 'Something went wrong. Please try again or email us directly.');
+    const formAction = form.getAttribute('action');
+
+    // Submit to form service endpoint
+    if (formAction && formAction !== '#') {
+      fetch(formAction, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      .then(function(response) {
+        if (response.ok) {
+          showFormSuccess(form);
+        } else {
+          throw new Error('Form submission failed');
+        }
+      })
+      .catch(function(error) {
+        console.error('Error:', error);
+        showFormError(form, 'Something went wrong. Please try again or email us directly.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalBtnText;
+      });
+    } else {
+      // Form service not configured yet
+      showFormError(form, 'Form service not configured. Please email us directly at info@halcourtsearch.com');
       submitBtn.disabled = false;
       submitBtn.textContent = originalBtnText;
-    });
+    }
   }
 
   function validateForm(form) {
