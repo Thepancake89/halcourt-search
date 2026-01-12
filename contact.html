@@ -78,7 +78,7 @@
           <div>
             <h2 class="mb-8">Send us a message</h2>
             
-            <form name="contact" method="POST" action="#" id="contactForm" enctype="multipart/form-data">
+            <form name="contact" method="POST" action="#" id="contactForm">
               <!-- TODO: Set up form submission service (Formspree, Web3Forms, or custom API) -->
               <!-- Replace action="#" with your form endpoint -->
 
@@ -105,11 +105,6 @@
               <div class="form__group">
                 <label for="message" class="form__label">Message *</label>
                 <textarea id="message" name="message" class="form__textarea" required placeholder="Tell us a bit about what you're looking for..."></textarea>
-              </div>
-              
-              <div class="form__group">
-                <label for="cv" class="form__label">Attach CV (optional)</label>
-                <input type="file" id="cv" name="cv" class="form__file" accept=".pdf,.doc,.docx">
               </div>
               
               <button type="submit" class="btn btn--primary btn--lg">Send message</button>
