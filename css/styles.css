@@ -1039,6 +1039,39 @@ p:last-child {
   margin-top: var(--space-1);
 }
 
+/* Services page intro - mobile layout */
+@media (max-width: 767px) {
+  .split--services-intro {
+    grid-template-columns: 180px 1fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+  
+  .split--services-intro .split__image-wrapper {
+    width: 180px;
+    margin: 0;
+  }
+  
+  .split--services-intro .split__image {
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  
+  .split--services-intro .split__content {
+    max-width: 100%;
+  }
+  
+  .split--services-intro .split__content h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-4);
+  }
+  
+  .split--services-intro .split__content p {
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-4);
+  }
+}
+
 /* ==========================================================================
    CHECK LIST
    ========================================================================== */
@@ -1471,6 +1504,15 @@ p:last-child {
     margin: 0 auto var(--space-8);
     padding-bottom: var(--space-8);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .footer__logo {
+    margin-left: auto;
+    margin-right: auto;
   }
   
   .footer__nav {
@@ -1488,6 +1530,16 @@ p:last-child {
   
   .footer__link--icon {
     justify-content: center;
+  }
+  
+  .footer__bottom {
+    align-items: center;
+    text-align: center;
+  }
+  
+  .footer__legal {
+    justify-content: center;
+    width: 100%;
   }
 }
 
