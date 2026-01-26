@@ -1450,12 +1450,12 @@ p:last-child {
   }
   
   .footer__logo {
-    transform: translateY(calc(var(--space-3) * -1));
+    transform: translateY(calc(var(--space-12) * -1));
   }
 }
 
 .footer__logo {
-  height: 160px;
+  height: 120px;
   width: auto;
   margin-bottom: 0;
   filter: brightness(0) invert(1);
@@ -1472,7 +1472,7 @@ p:last-child {
   font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.7);
   line-height: var(--leading-relaxed);
-  margin-top: calc(var(--space-1) * -1);
+  margin-top: calc(var(--space-2) * -1);
 }
 
 .footer__title {
