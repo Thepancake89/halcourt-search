@@ -1448,19 +1448,23 @@ p:last-child {
     align-self: start;
     margin-top: 0;
   }
+  
+  .footer__logo {
+    transform: translateY(calc(var(--space-3) * -1));
+  }
 }
 
 .footer__logo {
   height: 160px;
   width: auto;
-  margin-bottom: var(--space-1);
+  margin-bottom: 0;
   filter: brightness(0) invert(1);
 }
 
 @media (max-width: 767px) {
   .footer__logo {
     height: 120px;
-    margin-bottom: var(--space-1);
+    margin-bottom: 0;
   }
 }
 
@@ -1468,6 +1472,7 @@ p:last-child {
   font-size: var(--text-sm);
   color: rgba(255, 255, 255, 0.7);
   line-height: var(--leading-relaxed);
+  margin-top: calc(var(--space-1) * -1);
 }
 
 .footer__title {
