@@ -1,12 +1,11 @@
 # Robots.txt for Halcourt Search
-# https://halcourtsearch.com
+# https://www.halcourtsearch.com
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://halcourtsearch.com/sitemap.xml
+Sitemap: https://www.halcourtsearch.com/sitemap.xml
 
 # Disallow admin or internal pages if any
 Disallow: /404.html
-
